@@ -1,6 +1,6 @@
 import React from 'react';
-import { Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import RotatingZ from './RotatingZ';
 
 interface HeroSectionProps {
   ideasCount: number;
@@ -15,6 +15,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 }) => {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
+      {/* RotatingZ Background */}
+      <RotatingZ />
+      
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-gray-900/20" />
 
       {/* Animated background elements */}

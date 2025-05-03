@@ -13,3 +13,44 @@ body {
 ::selection {
   @apply bg-blue-500/30;
 }
+
+/* Hide default cursor when custom cursor is active */
+.cursor-none,
+.cursor-none * {
+  cursor: none !important;
+}
+
+/* Ensure pointer events don't interfere with cursor visibility */
+a, button, [role="button"], 
+.hover-effect, input, textarea, select {
+  cursor: none !important;
+  z-index: 1;
+  position: relative;
+}
+
+/* Force cursor visibility on all elements that might have their own cursors */
+.cursor-wrapper * {
+  pointer-events: none;
+}
+
+/* Ensure cursor effects appear above all other elements */
+.cursor-wrapper div {
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Make the thunder Z SVG interactive */
+.hover-effect {
+  pointer-events: auto !important;
+}
+
+/* Custom animation for thunder pulse */
+@keyframes thunderPulse {
+  0% { filter: drop-shadow(0 0 5px rgba(96,165,250,0.3)); }
+  50% { filter: drop-shadow(0 0 15px rgba(96,165,250,0.7)); }
+  100% { filter: drop-shadow(0 0 5px rgba(96,165,250,0.3)); }
+}
+
+.thunder-animation {
+  animation: thunderPulse 2s infinite;
+}

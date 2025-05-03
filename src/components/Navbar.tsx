@@ -14,7 +14,7 @@ import {
   Twitter,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { Rocket } from 'lucide-react';
+import ZLogo from "./ZLogo";
 
 
 // Types
@@ -87,10 +87,7 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Rocket className="w-8 h-8 text-blue-400" />
-            <span className="text-2xl font-bold  bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              ZAPTRIX
-            </span>
+            <ZLogo size="md" />
           </Link>
 
           {/* Desktop Navigation */}

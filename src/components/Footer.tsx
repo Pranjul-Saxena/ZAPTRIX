@@ -1,14 +1,15 @@
 import React from "react";
+import ZLogo from "./ZLogo";
 
 function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-400 py-4 mt-8"> {/* Adjusted padding/margin */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="border-t border-gray-800 pt-8 text-sm text-center">
-           {/* Optional: Add logo or more links here later */}
-           <h3 className="text-white font-semibold text-lg mb-4">
-             ZAPTRIX
-           </h3>
+           {/* Use ZLogo component instead of plain text */}
+           <div className="flex justify-center mb-4">
+             <ZLogo size="sm" />
+           </div>
           <p>
             © {new Date().getFullYear()} Zaptrix. All rights
             reserved.
