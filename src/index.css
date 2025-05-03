@@ -20,12 +20,31 @@ body {
   cursor: none !important;
 }
 
+/* Reset cursor for mobile devices */
+@media (max-width: 768px) {
+  body, body * {
+    cursor: auto !important;
+  }
+}
+
 /* Ensure pointer events don't interfere with cursor visibility */
 a, button, [role="button"], 
 .hover-effect, input, textarea, select {
   cursor: none !important;
   z-index: 1;
   position: relative;
+}
+
+/* Mobile optimizations for touch controls */
+@media (max-width: 768px) {
+  .hover-effect {
+    touch-action: manipulation;
+  }
+
+  /* Make SVG elements more responsive to touch */
+  svg {
+    touch-action: manipulation;
+  }
 }
 
 /* Force cursor visibility on all elements that might have their own cursors */
@@ -44,11 +63,36 @@ a, button, [role="button"],
   pointer-events: auto !important;
 }
 
+/* Fix the thunder hover functionality */
+[class*='HeroSection'] {
+  position: relative;
+  z-index: 1;
+}
+
+/* Fix for rotatingZ to capture hover events properly */
+.fixed.inset-0.flex.items-center.justify-center.overflow-hidden {
+  z-index: 0;
+  pointer-events: all;
+}
+
+.fixed.inset-0.flex.items-center.justify-center.overflow-hidden > .absolute.inset-0 {
+  cursor: pointer;
+}
+
 /* Custom animation for thunder pulse */
 @keyframes thunderPulse {
   0% { filter: drop-shadow(0 0 5px rgba(96,165,250,0.3)); }
   50% { filter: drop-shadow(0 0 15px rgba(96,165,250,0.7)); }
   100% { filter: drop-shadow(0 0 5px rgba(96,165,250,0.3)); }
+}
+
+/* Reduce animation intensity on mobile */
+@media (max-width: 768px) {
+  @keyframes thunderPulse {
+    0% { filter: drop-shadow(0 0 3px rgba(96,165,250,0.2)); }
+    50% { filter: drop-shadow(0 0 8px rgba(96,165,250,0.5)); }
+    100% { filter: drop-shadow(0 0 3px rgba(96,165,250,0.2)); }
+  }
 }
 
 .thunder-animation {

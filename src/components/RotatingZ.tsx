@@ -5,6 +5,7 @@ const RotatingZ: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const zRef = useRef<HTMLDivElement>(null);
   
   // Motion values for rotation with spring physics for smoother motion
@@ -25,21 +26,30 @@ const RotatingZ: React.FC = () => {
     isHovered ? [25, -25] : [15, -15]
   );
   
-  // Update window size on resize
+  // Check if device is mobile and update window size on resize
   useEffect(() => {
-    const handleResize = () => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight
       });
     };
     
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
   
-  // Track mouse position
+  // Track mouse position (only on desktop)
   useEffect(() => {
+    if (isMobile) {
+      // Set default rotation values for mobile
+      rotateX.set(0);
+      rotateY.set(0);
+      return;
+    }
+    
     const handleMouseMove = (e: MouseEvent) => {
       // Calculate normalized mouse position (-1 to 1)
       const x = (e.clientX / windowSize.width) * 2 - 1;
@@ -54,21 +64,36 @@ const RotatingZ: React.FC = () => {
     
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [windowSize, rotateX, rotateY]);
+  }, [windowSize, rotateX, rotateY, isMobile]);
   
   // Handle hover effects
   const handleMouseEnter = () => {
+    if (isMobile) return;
     setIsHovered(true);
     scale.set(1.2);
   };
   
   const handleMouseLeave = () => {
+    if (isMobile) return;
     setIsHovered(false);
     scale.set(1);
   };
   
-  // Auto rotation effect when not interacting
+  // Touch events for mobile
+  const handleTouchStart = () => {
+    setIsHovered(true);
+    scale.set(1.1); // Smaller scale for mobile
+  };
+  
+  const handleTouchEnd = () => {
+    setIsHovered(false);
+    scale.set(1);
+  };
+  
+  // Auto rotation effect when not interacting (only on desktop)
   useEffect(() => {
+    if (isMobile) return;
+    
     let intervalId: NodeJS.Timeout;
     
     if (!isHovered) {
@@ -86,10 +111,33 @@ const RotatingZ: React.FC = () => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [isHovered, rotateX, rotateY]);
+  }, [isHovered, rotateX, rotateY, isMobile]);
+  
+  // Simple pulse animation for mobile
+  useEffect(() => {
+    if (!isMobile) return;
+    
+    const pulseInterval = setInterval(() => {
+      scale.set(1.05);
+      setTimeout(() => {
+        scale.set(1);
+      }, 1000);
+    }, 3000);
+    
+    return () => clearInterval(pulseInterval);
+  }, [scale, isMobile]);
   
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-0 overflow-hidden">
+    <div className="fixed inset-0 flex items-center justify-center overflow-hidden">
+      {/* Transparent overlay to capture hover events across the entire element */}
+      <div 
+        className="absolute inset-0 z-10"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      />
+      
       <motion.div
         ref={zRef}
         style={{
@@ -98,15 +146,13 @@ const RotatingZ: React.FC = () => {
           scale,
         }}
         transition={{ type: "spring", stiffness: 50, damping: 20 }}
-        className="relative hover-effect"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        className="relative"
       >
         <motion.svg 
-          width="600" 
-          height="600" 
+          width={isMobile ? "400" : "600"} 
+          height={isMobile ? "400" : "600"} 
           viewBox="0 0 24 24" 
-          className={`${isHovered ? 'opacity-20' : 'opacity-5'} transition-all duration-300 ${isHovered ? 'thunder-animation' : ''}`}
+          className={`${isHovered ? 'opacity-20' : 'opacity-5'} transition-all duration-300 ${isHovered ? 'thunder-animation' : ''} hover-effect z-[5]`}
         >
           <motion.path 
             d="M13 3L4 14H11L9 21L18 10H11L13 3Z" 

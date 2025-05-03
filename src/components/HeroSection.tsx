@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import RotatingZ from './RotatingZ';
 
@@ -13,6 +13,19 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   onSubmitClick,
   onViewSubmissions,
 }) => {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Check for mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
       {/* RotatingZ Background */}
@@ -26,7 +39,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="absolute w-96 h-96 -bottom-48 -right-48 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-700" />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto text-center">
+      <div className="relative z-10 max-w-4xl mx-auto text-center pointer-events-auto">
         <div className="flex items-center justify-center mt-0 sm:mt-6 mb-4">
           {/* <Rocket className="w-5 h-5 sm:w-12 sm:h-12 text-blue-400" /> */}
           {/* <h1 className="text-xl sm:text-4xl font-bold ml-3">ZAPTRIX</h1> */}
@@ -54,7 +67,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        <div className="flex gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/submit" // Replace with your actual route path
             className="px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 text-center"

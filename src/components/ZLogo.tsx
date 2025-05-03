@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useSpring } from 'framer-motion';
 
 interface ZLogoProps {
@@ -7,6 +7,19 @@ interface ZLogoProps {
 
 const ZLogo: React.FC<ZLogoProps> = ({ size = 'md' }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const logoRef = useRef<HTMLDivElement>(null);
+  
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // Size mappings
   const sizeClasses = {
@@ -15,12 +28,46 @@ const ZLogo: React.FC<ZLogoProps> = ({ size = 'md' }) => {
     lg: { z: 'text-5xl', text: 'text-4xl', svg: 'w-12 h-12' },
   };
   
+  // Make sure hover state is cleared when mouse leaves window
+  useEffect(() => {
+    const handleMouseLeave = () => {
+      setIsHovered(false);
+    };
+    
+    document.addEventListener('mouseleave', handleMouseLeave);
+    return () => document.removeEventListener('mouseleave', handleMouseLeave);
+  }, []);
+  
+  // Handle touch events for mobile
+  const handleTouchStart = () => {
+    setIsHovered(true);
+  };
+  
+  const handleTouchEnd = () => {
+    setIsHovered(false);
+  };
+  
+  const handleMouseEnter = () => {
+    if (!isMobile) {
+      setIsHovered(true);
+    }
+  };
+  
+  const handleMouseLeave = () => {
+    if (!isMobile) {
+      setIsHovered(false);
+    }
+  };
+  
   return (
     <motion.div 
-      className="relative flex items-center hover-effect"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ scale: 1.05 }}
+      ref={logoRef}
+      className="relative flex items-center hover-effect z-20"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      whileHover={{ scale: isMobile ? 1.02 : 1.05 }}
       transition={{ type: "spring", stiffness: 400, damping: 10 }}
     >
       <div className="flex items-center">
@@ -30,9 +77,13 @@ const ZLogo: React.FC<ZLogoProps> = ({ size = 'md' }) => {
           animate={{ 
             opacity: isHovered ? 0 : 1,
             scale: isHovered ? 0.8 : 1,
-            rotate: isHovered ? 10 : 0,
+            rotate: isHovered ? (isMobile ? 5 : 10) : 0,
           }}
-          transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
+          transition={{ 
+            duration: isMobile ? 0.2 : 0.3, 
+            type: "spring", 
+            stiffness: isMobile ? 300 : 200 
+          }}
           className={`${sizeClasses[size].svg} text-blue-400 ${isHovered ? 'thunder-animation' : ''}`}
         >
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,7 +107,12 @@ const ZLogo: React.FC<ZLogoProps> = ({ size = 'md' }) => {
             width: isHovered ? 'auto' : 0,
             x: isHovered ? 0 : -10
           }}
-          transition={{ duration: 0.4, delay: 0.1, type: "spring", stiffness: 100 }}
+          transition={{ 
+            duration: isMobile ? 0.3 : 0.4, 
+            delay: isMobile ? 0 : 0.1, 
+            type: "spring", 
+            stiffness: isMobile ? 150 : 100 
+          }}
         >
           ZAPTRIX
         </motion.span>
@@ -68,28 +124,34 @@ const ZLogo: React.FC<ZLogoProps> = ({ size = 'md' }) => {
         initial={{ opacity: 1 }}
         animate={{ 
           opacity: isHovered ? 0 : 1,
-          x: isHovered ? 15 : 0,
-          rotate: isHovered ? 10 : 0
+          x: isHovered ? (isMobile ? 10 : 15) : 0,
+          rotate: isHovered ? (isMobile ? 5 : 10) : 0
         }}
         transition={{ 
-          duration: 0.3, 
+          duration: isMobile ? 0.2 : 0.3, 
           type: "spring", 
-          stiffness: 200,
-          damping: 15
+          stiffness: isMobile ? 300 : 200,
+          damping: isMobile ? 20 : 15
         }}
       >
         Z
       </motion.span>
       
-      {/* Glow effect behind Z */}
+      {/* Glow effect behind Z - reduced on mobile */}
       <motion.div
         className="absolute inset-0 rounded-full blur-md opacity-0"
         style={{ backgroundColor: 'rgba(96, 165, 250, 0.3)' }}
         animate={{ 
-          opacity: isHovered ? 0.5 : 0,
-          scale: isHovered ? 1.2 : 0.8
+          opacity: isHovered ? (isMobile ? 0.3 : 0.5) : 0,
+          scale: isHovered ? (isMobile ? 1.1 : 1.2) : 0.8
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: isMobile ? 0.2 : 0.3 }}
+      />
+      
+      {/* Invisible hit area to improve hover detection */}
+      <div 
+        className="absolute inset-0 -m-2 cursor-pointer"
+        style={{ zIndex: -1 }}
       />
     </motion.div>
   );

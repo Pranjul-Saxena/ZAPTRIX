@@ -10,7 +10,21 @@ const AnimatedCursor: React.FC = () => {
   // Check if device is touch device
   useEffect(() => {
     const checkTouchDevice = () => {
-      setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+      const isTouchCapable = 
+        'ontouchstart' in window || 
+        navigator.maxTouchPoints > 0 || 
+        (navigator as any).msMaxTouchPoints > 0 ||
+        window.matchMedia('(pointer: coarse)').matches ||
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      setIsTouchDevice(isTouchCapable);
+      
+      // Remove cursor-none class from body on touch devices
+      if (isTouchCapable) {
+        document.body.classList.remove('cursor-none');
+      } else {
+        document.body.classList.add('cursor-none');
+      }
     };
     
     checkTouchDevice();
@@ -64,7 +78,8 @@ const AnimatedCursor: React.FC = () => {
         target.closest('button') ||
         target.hasAttribute('role') ||
         target.classList.contains('hover-effect') ||
-        target.closest('[role="button"]')
+        target.closest('[role="button"]') ||
+        target.closest('.hover-effect')
       ) {
         setIsHovering(true);
       }
