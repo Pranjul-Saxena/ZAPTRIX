@@ -134,7 +134,7 @@ const ZLogo: React.FC<ZLogoProps> = ({ size = 'md' }) => {
           damping: isMobile ? 20 : 15
         }}
       >
-        Z
+        
       </motion.span>
       
       {/* Glow effect behind Z - reduced on mobile */}

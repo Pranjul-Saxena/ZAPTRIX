@@ -139,7 +139,7 @@ const AnimatedCursor: React.FC = () => {
       />
       
       {/* Trail dots */}
-      {[0.1, 0.2, 0.3, 0.4, 0.5].map((delay, index) => (
+      {[0.01, 0.02].map((delay, index) => (
         <motion.div
           key={index}
           className="fixed w-1 h-1 bg-blue-300 rounded-full pointer-events-none z-[9999] mix-blend-screen"
@@ -157,7 +157,7 @@ const AnimatedCursor: React.FC = () => {
             type: 'spring',
             stiffness: 400,
             damping: 40,
-            delay: delay * 0.1,
+            delay: delay * 0.01,
           }}
         />
       ))}
