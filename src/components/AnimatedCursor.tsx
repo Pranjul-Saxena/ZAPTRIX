@@ -102,7 +102,7 @@ const AnimatedCursor: React.FC = () => {
     <div className="cursor-wrapper">
       {/* Main cursor dot */}
       <motion.div
-        className="fixed w-4 h-4 bg-blue-400 rounded-full pointer-events-none z-[9999] mix-blend-screen"
+        className="fixed w-4 h-4 bg-blue-950 rounded-full pointer-events-none z-[9999] mix-blend-screen"
         style={{
           left: mousePosition.x - 8,
           top: mousePosition.y - 8,
@@ -139,7 +139,7 @@ const AnimatedCursor: React.FC = () => {
       />
       
       {/* Trail dots */}
-      {[0.01, 0.02].map((delay, index) => (
+      {/* {[0.01, 0.02, 0.03, 0.04].map((delay, index) => (
         <motion.div
           key={index}
           className="fixed w-1 h-1 bg-blue-300 rounded-full pointer-events-none z-[9999] mix-blend-screen"
@@ -160,7 +160,7 @@ const AnimatedCursor: React.FC = () => {
             delay: delay * 0.01,
           }}
         />
-      ))}
+      ))} */}
     </div>
   );
 };

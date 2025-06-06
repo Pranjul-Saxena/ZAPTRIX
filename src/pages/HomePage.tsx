@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import HeroSection from '../components/HeroSection';
-import HowItWorks from '../components/HowItWorks';
-import FeatureGrid from '../components/FeatureGrid';
-import AboutUs from '../components/AboutUs1';
-import { Rocket } from 'lucide-react';
-import { getFormData } from '../services/firebaseService';
+import React, { useEffect, useState } from "react";
+import HeroSection from "../components/HeroSection";
+import HowItWorks from "../components/HowItWorks";
+import FeatureGrid from "../components/FeatureGrid";
+import AboutUs from "../components/AboutUs1";
+import { Rocket } from "lucide-react";
+import { getFormData } from "../services/firebaseService";
+import RotatingZ from "../components/RotatingZ";
 
 const HomePage: React.FC = () => {
   const [ideasCount1, setIdeasCount] = useState(0);
@@ -27,12 +28,16 @@ const HomePage: React.FC = () => {
   }, []);
   return (
     <>
+      <RotatingZ />
+
       <HeroSection
         ideasCount={ideasCount1}
-        onSubmitClick={() => { }}
-        onViewSubmissions={() => { }}
+        onSubmitClick={() => {}}
+        onViewSubmissions={() => {}}
       />
       <HowItWorks />
+      {/* <RotatingZ /> */}
+
       <div className="text-white p-0 m-4">
         <div className="relative overflow-hidden px-4">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-16 text-center">
@@ -42,17 +47,17 @@ const HomePage: React.FC = () => {
             </h1>
             <p className="text-xl text-gray-500 max-w-3xl mx-auto mb-8">
               Join a community of innovators, entrepreneurs, and developers.
-              Build, collaborate, and scale your software ideas on the
-              Zaptrix platform.
+              Build, collaborate, and scale your software ideas on the Zaptrix
+              platform.
             </p>
             <div className="flex gap-4 justify-center">
-              <button
-                className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center gap-2"
-              >
+              <button className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center gap-2">
                 Get Started <Rocket className="w-5 h-5 text-blue-100" />
               </button>
             </div>
           </div>
+          <RotatingZ />
+
           <FeatureGrid />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <AboutUs />
@@ -63,4 +68,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage; 
+export default HomePage;

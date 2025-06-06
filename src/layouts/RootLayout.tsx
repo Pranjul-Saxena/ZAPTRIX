@@ -51,7 +51,7 @@ const RootLayout: React.FC = () => {
   }, [isMobile]);
   
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-black text-white">
       {!isMobile && <AnimatedCursor />}
       <Navbar />
       <main>

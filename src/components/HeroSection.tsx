@@ -29,15 +29,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
       {/* RotatingZ Background */}
-      <RotatingZ />
+      {/* <RotatingZ /> */}
       
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-gray-900/20" />
 
       {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* <div className="absolute inset-0 overflow-hidden">
         <div className="absolute w-96 h-96 -top-48 -left-48 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute w-96 h-96 -bottom-48 -right-48 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-700" />
-      </div>
+      </div> */}
 
       <div className="relative z-10 max-w-4xl mx-auto text-center pointer-events-auto">
         <div className="flex items-center justify-center mt-0 sm:mt-6 mb-4">
